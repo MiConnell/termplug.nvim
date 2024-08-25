@@ -6,7 +6,7 @@ local buffers, windows = {}, {}
 local size = 0.9
 local window_currently_opened = false
 
-function M.open_window(process)
+function M.get_float_config()
     local ui_info = api.nvim_list_uis()[1]
     local width = math.floor(ui_info.width * size)
     local height = math.floor(ui_info.height * size)
@@ -14,7 +14,7 @@ function M.open_window(process)
     if size == 1 then
         border = "none"
     end
-    windows[process] = api.nvim_open_win(buffers[process], true, {
+    return {
         relative = "editor",
         width = width,
         height = height,
@@ -22,26 +22,48 @@ function M.open_window(process)
         col = (ui_info.width - width) * 0.5,
         style = "minimal",
         border = border
-    })
+    }
+end
+
+function M.open_window(process)
+    windows[process] = api.nvim_open_win(buffers[process], true, M.get_float_config())
 end
 
 function M.create_window(process)
     local termplug_augroup = api.nvim_create_augroup("termplug_" .. process, { clear = true })
+    local term_buffer = buffers[process]
+    if not api.nvim_buf_is_valid(term_buffer) then return end
+
     api.nvim_create_autocmd("TermClose", {
+        buffer = term_buffer,
+        group = termplug_augroup,
         callback = function()
-            if api.nvim_get_current_buf() ~= buffers[process] then
-                return
+            local t_buffer = buffers[process]
+            if api.nvim_get_current_buf() ~= t_buffer then return end
+
+            if api.nvim_buf_is_valid(t_buffer) then
+                api.nvim_buf_delete(t_buffer, { force = true })
             end
-            if api.nvim_buf_is_valid(buffers[process]) then
-                api.nvim_buf_delete(buffers[process], { force = true })
+
+            local t_window = windows[process]
+            if api.nvim_win_is_valid(t_window) then
+                api.nvim_win_close(t_window, true)
             end
-            if api.nvim_win_is_valid(windows[process]) then
-                api.nvim_win_close(windows[process], true)
-            end
+
             window_currently_opened = false
         end,
-        group = termplug_augroup,
     })
+
+    api.nvim_create_autocmd("VimResized", {
+        buffer = term_buffer,
+        group = termplug_augroup,
+        callback = function()
+            local term_window = windows[process]
+            if not api.nvim_win_is_valid(term_window) then return end
+            api.nvim_win_set_config(term_window, M.get_float_config())
+        end
+    })
+
     M.open_window(process)
 end
 
