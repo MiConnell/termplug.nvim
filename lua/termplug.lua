@@ -58,9 +58,10 @@ function M.create_window(process)
         buffer = term_buffer,
         group = termplug_augroup,
         callback = function()
-            local term_window = windows[process]
-            if not api.nvim_win_is_valid(term_window) then return end
-            api.nvim_win_set_config(term_window, M.get_float_config())
+            local t_window = windows[process]
+            if not api.nvim_win_is_valid(t_window) then return end
+
+            api.nvim_win_set_config(t_window, M.get_float_config())
         end
     })
 
@@ -71,8 +72,10 @@ function M.toggle(process)
     if process == nil then
         process = "bash"
     end
-    if buffers[process] == nil or not api.nvim_buf_is_valid(buffers[process]) then
-        if window_currently_opened == true then return end -- TODO: instead of return, close the window
+    local t_buffer = buffers[process]
+    if t_buffer == nil or not api.nvim_buf_is_valid(t_buffer) then
+        if window_currently_opened == true then return end
+
         local new_buf = api.nvim_create_buf(false, true)
         buffers[process] = new_buf
         M.create_window(process)
@@ -80,12 +83,14 @@ function M.toggle(process)
         vim.cmd("startinsert")
         window_currently_opened = true
     else
-        if api.nvim_get_current_buf() == buffers[process] then
-            if window_currently_opened == false then return end -- TODO: instead of return, close the window
+        if api.nvim_get_current_buf() == t_buffer then
+            if window_currently_opened == false then return end
+
             api.nvim_win_close(windows[process], true)
             window_currently_opened = false
         else
-            if window_currently_opened == true then return end -- TODO: instead of return, close the window
+            if window_currently_opened == true then return end
+
             M.open_window(process)
             vim.cmd("startinsert")
             window_currently_opened = true
@@ -99,9 +104,11 @@ function M.setup(opts)
     size = opts.size or size
 
     api.nvim_create_user_command("Term", function(input)
-        local option = input.args
-        if #option == 0 then option = nil end
-        M.toggle(option)
+        local process = input.args
+        if #process == 0 then
+            process = nil
+        end
+        M.toggle(process)
     end, { force = true, nargs = "*" })
 end
 
