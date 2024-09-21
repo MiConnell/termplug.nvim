@@ -48,7 +48,7 @@ vim.keymap.set({ "n", "t" }, "<C-g>", "<cmd> Term lazygit <CR>")
 There are only two configuration options: `size` and `shell`.
 
 `size` controlls how big will be the popup window. Takes values from `0.0` to `1.0` (defaults to 0.9).
-`shell` controlls which shell you would like to open (bash, zsh, tmux, etc.) if you don't pass any arguments to `:Term` (defaults to `bash`)
+`shell` controls which default shell to open (bash, zsh, tmux, etc.) when no arguments are passed to `:Term` (defaults to `bash`)
 
 **Set the size value to `1` for a full screen terminal popup.**
 
