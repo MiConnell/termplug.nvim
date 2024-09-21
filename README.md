@@ -51,6 +51,7 @@ There are only three configuration options: `width`, `height`, and `shell`.
 `height` controlls how wide the popup window will be. Takes values from `0.0` to `1.0` (defaults to 0.45).
 `shell` controlls which shell you would like to open (bash, zsh, tmux, etc.) if you don't pass any arguments to `:Term` (defaults to `zsh`)
 
+
 **Set the size value to `1` for a full screen terminal popup.**
 
 - For [folke/lazy.nvim](https://github.com/folke/lazy.nvim)

@@ -122,6 +122,7 @@ function M.setup(opts)
 		end
 		M.toggle(process)
 	end, { force = true, nargs = "*" })
+
 end
 
 return M
