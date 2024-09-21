@@ -15,17 +15,17 @@ This plugin exposes to the user only one function:
 ## 📦 Installation
 - With [folke/lazy.nvim](https://github.com/folke/lazy.nvim)
 ```lua
-{ "Ernest1338/termplug.nvim" }
+{ "MiConnell/termplug.nvim" }
 ```
 
 - With [wbthomason/packer.nvim](https://github.com/wbthomason/packer.nvim)
 ```lua
-use "Ernest1338/termplug.nvim"
+use "MiConnell/termplug.nvim"
 ```
 
 - With [echasnovski/mini.deps](https://github.com/echasnovski/mini.deps)
 ```lua
-add("Ernest1338/termplug.nvim")
+add("MiConnell/termplug.nvim")
 ```
 
 ## 🚀 Usage
@@ -45,22 +45,23 @@ vim.keymap.set({ "n", "t" }, "<C-g>", "<cmd> Term lazygit <CR>")
 
 ## 🔧 Configuration
 
-There are only two configuration options: `size` and `shell`.
+There are only three configuration options: `width`, `height`, and `shell`.
 
-`size` controlls how big will be the popup window. Takes values from `0.0` to `1.0` (defaults to 0.9).
-`shell` controlls which shell you would like to open (bash, zsh, tmux, etc.) if you don't pass any arguments to `:Term` (defaults to `bash`)
+`width` controlls how wide the popup window will be. Takes values from `0.0` to `1.0` (defaults to 0.65).
+`height` controlls how wide the popup window will be. Takes values from `0.0` to `1.0` (defaults to 0.45).
+`shell` controlls which shell you would like to open (bash, zsh, tmux, etc.) if you don't pass any arguments to `:Term` (defaults to `zsh`)
 
 **Set the size value to `1` for a full screen terminal popup.**
 
 - For [folke/lazy.nvim](https://github.com/folke/lazy.nvim)
 ```lua
-{ "Ernest1338/termplug.nvim", config = { size = 0.5, shell = "zsh" } },
+{ "MiConnell/termplug.nvim", config = { size = 0.5, shell = "zsh" } },
 ```
 
 - For [wbthomason/packer.nvim](https://github.com/wbthomason/packer.nvim)
 ```lua
 use {
-    "Ernest1338/termplug.nvim",
+    "MiConnell/termplug.nvim",
     config = function()
         require("termplug").setup{ size = 0.5, shell = "tmux" }
     end
@@ -70,20 +71,11 @@ use {
 - For [echasnovski/mini.deps](https://github.com/echasnovski/mini.deps)
 ```lua
 later(function()
-    add("Ernest1338/termplug.nvim")
+    add("MiConnell/termplug.nvim")
     require("termplug").setup({ size = 0.5, shell = "fish" })
 end)
 ```
 
 ## ⚡ Requirements
 - Neovim >= **v0.7.0**
-
-## ❔ Why
-
-Because I wanted a simple plugin to toggle a popup terminal window with a mapping and every existing terminal plugins seem over complicated.
-
-Combined with the ability to choose which process to execute, this plugin became not only a terminal plugin
-but it can also toggle a popup window with any TUI application of your choosing.
-
-For simplicity, it supports toggling only one of each process (one bash, one lazygit, ...) at a time.
 
